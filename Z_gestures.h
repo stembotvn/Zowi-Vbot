@@ -5,19 +5,19 @@
 //*********************************GESTURE DEFINES***********************************
 //***********************************************************************************           
 
-#define OttoHappy 		0
-#define OttoSuperHappy 	1
-#define OttoSad 		2
-#define OttoSleeping 	3
-#define OttoFart 		4
-#define OttoConfused 	5
-#define OttoLove 		6
-#define OttoAngry 		7
-#define OttoFretful 	8
-#define OttoMagic 		9
-#define OttoWave 		10
-#define OttoVictory 	11
-#define OttoFail 		12
+#define RobotHappy 		0
+#define RobotSuperHappy 	1
+#define RobotSad 		2
+#define RobotSleeping 	3
+#define RobotFart 		4
+#define RobotConfused 	5
+#define RobotLove 		6
+#define RobotAngry 		7
+#define RobotFretful 	8
+#define RobotMagic 		9
+#define RobotWave 		10
+#define RobotVictory 	11
+#define RobotFail 		12
 
 //*** MOUTH ANIMATIONS***
 #define littleUuh		0

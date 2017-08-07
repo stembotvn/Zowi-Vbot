@@ -873,7 +873,7 @@ void ZowiVbot::playGesture(int gesture){
   
   switch(gesture){
 
-    case OttoHappy: 
+    case RobotHappy: 
         _tone(note_E5,50,30);
         //putMouth(smile);
         sing(S_happy_short);
@@ -885,7 +885,7 @@ void ZowiVbot::playGesture(int gesture){
     break;
 
 
-    case OttoSuperHappy:
+    case RobotSuperHappy:
        // putMouth(happyOpen);
         sing(S_happy);
       //  putMouth(happyClosed);
@@ -900,7 +900,7 @@ void ZowiVbot::playGesture(int gesture){
     break;
 
 
-    case OttoSad: 
+    case RobotSad: 
        // putMouth(sad);
         _moveServos(700, sadPos);     
         bendTones(880, 830, 1.02, 20, 200);
@@ -921,7 +921,7 @@ void ZowiVbot::playGesture(int gesture){
     break;
 
 
-    case OttoSleeping:
+    case RobotSleeping:
         _moveServos(700, bedPos);     
 
         for(int i=0; i<4;i++){
@@ -947,7 +947,7 @@ void ZowiVbot::playGesture(int gesture){
     break;
 
 
-    case OttoFart:
+    case RobotFart:
         _moveServos(500,fartPos_1);
         delay(300);     
       //  putMouth(lineMouth);
@@ -973,7 +973,7 @@ void ZowiVbot::playGesture(int gesture){
     break;
 
 
-    case OttoConfused:
+    case RobotConfused:
         _moveServos(300, confusedPos); 
            //   putMouth(confused);
         sing(S_confused);
@@ -984,7 +984,7 @@ void ZowiVbot::playGesture(int gesture){
     break;
 
 
-    case OttoLove:
+    case RobotLove:
            //   putMouth(heart);
         sing(S_cuddly);
         crusaito(2,1500,15,1);
@@ -995,7 +995,7 @@ void ZowiVbot::playGesture(int gesture){
     break;
 
 
-    case OttoAngry: 
+    case RobotAngry: 
         _moveServos(300, angryPos); 
           //    putMouth(angry);
 
@@ -1016,7 +1016,7 @@ void ZowiVbot::playGesture(int gesture){
     break;
 
 
-    case OttoFretful: 
+    case RobotFretful: 
             //  putMouth(angry);
         bendTones(note_A5, note_D6, 1.02, 20, 4);
         bendTones(note_A5, note_E5, 1.02, 20, 4);
@@ -1036,7 +1036,7 @@ void ZowiVbot::playGesture(int gesture){
     break;
 
 
-    case OttoMagic:
+    case RobotMagic:
 
         //Initial note frecuency = 400
         //Final note frecuency = 1000
@@ -1067,7 +1067,7 @@ void ZowiVbot::playGesture(int gesture){
     break;
 
 
-    case OttoWave:
+    case RobotWave:
         
         // Reproduce the animation four times
         for(int i = 0; i<2; i++){ 
@@ -1101,7 +1101,7 @@ void ZowiVbot::playGesture(int gesture){
            //   putMouth(happyOpen);
     break;
 
-    case OttoVictory:
+    case RobotVictory:
         
             //  putMouth(smallSurprise);
         //final pos   = {90,90,150,30}
@@ -1134,7 +1134,7 @@ void ZowiVbot::playGesture(int gesture){
 
     break;
 
-    case OttoFail:
+    case RobotFail:
 
             //  putMouth(sadOpen);
         _moveServos(300,bendPos_1);
