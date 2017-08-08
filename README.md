@@ -13,10 +13,10 @@ Zowi-Vbot, là một biến thể được chỉnh sửa phần mềm  và thi�
 
 ## Zowi-Vbot Design
 Zowi-Vbot được stembot.vn thiết kế lại toàn bộ phần khung Hardware sử dụng vật liệu gỗ công nghiệp với công nghệ cắt LaserCNC thay cho bản gốc sử dụng công nghệ in 3D. Người chơi chỉ cần theo hướng dẫn có thể lắp ghép các mảnh gỗ với nhau trong vòng 30-45 phút là sẽ có cho mình một chú robot Zowi-Vbot ngộ nghĩnh với những tính năng không khác gì dự án gốc với giá thành thấp phù hợp với các bạn học sinh sinh viên ở Việt Nam. 
-Bộ lắp ghép Zowi-Vbot có thể order tại: http://stembot.vn/products/Zowi-Vbot
+Bộ lắp ghép Zowi-Vbot có thể order tại: http://stembot.vn/products/zowivbot
 
 ## Installation - Lắp đặt phần khung
-Làm theo hướng dẫn tải tại link: http://stembot.vn/products/otto-Vbot
+Làm theo hướng dẫn tải tại link: http://stembot.vn/products/zowivbot
 Chú ý: Trong quá trình lắp đặt trước khi lắp các chi tiết vào đĩa xoay của Servo Motor, cần nạp Chương trình Examples/ZowiVbot_ServoHome.ino để đưa các Servo về vị trí gốc. 
 Với các sản phẩm Full Combo kit, Arduino Board được stembot.vn nạp sẵn firmware BluetoothAPP, khi bật nguồn lên tất cả Servo sẽ tự động trở về vị trí gốc sau tiếng còi báo, vì vậy không cần thiết phải nạp chương trình OTTO_ServoHome để cân chỉnh vị trí gốc servo. 
 
