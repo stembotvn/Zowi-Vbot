@@ -21,13 +21,13 @@ Chú ý: Trong quá trình lắp đặt trước khi lắp các chi tiết vào 
 Với các sản phẩm Full Combo kit, Arduino Board được stembot.vn nạp sẵn firmware BluetoothAPP, khi bật nguồn lên tất cả Servo sẽ tự động trở về vị trí gốc sau tiếng còi báo, vì vậy không cần thiết phải nạp chương trình OTTO_ServoHome để cân chỉnh vị trí gốc servo. 
 
 ## Programming 
-Zowi-Vbot được build để có thể lập trình bằng ngôn ngữ C/C++ Arduino, Scratch Mblock và Graphical Block từ Android App Zowi dành cho các đối tượng mới tiếp cận với lập trình . Phiên bản hiện tại chỉ mới cơ bản ở ngôn ngữ Arduino C/C++ kết hợp với APP Zowi. Việc tiến hành tích hợp vào môi trường mBlock Scratch vẫn đang trong quá trình xây dựng và testing. 
+Zowi-Vbot được build để có thể lập trình bằng ngôn ngữ C/C++ Arduino, Scratch Mblock và Graphical Block từ Android App Zowi dành cho các đối tượng mới tiếp cận với lập trình . Phiên bản hiện tại chỉ mới cơ bản ở ngôn ngữ Arduino C/C++ kết hợp với APP Zowi. Việc tiến hành tích hợp vào môi trường mBlock Scratch vẫn đang trong quá trình xây dựng và thử nghiệm. 
 
 1. Cài đặt Arduino IDE để có thể viết code và nạp chương trình cho các Board tương thích nền tảng Arduino tại đây: https://www.arduino.cc/en/Main/Software (Bỏ qua nếu đã cài đặt Arduino IDE)
 2. Tải Driver cho Board Arduino Nano tại đây: http://www.wch.cn/download/CH341SER_EXE.html
 3. Download toàn bộ code tại Repo này theo định dạng nén .Zip
 4. Add thư viện Arduino thủ công bằng cách : Arduino IDE > vào Sketche/Include Library/Add .ZIP Library , tìm tới đường dẫn chưa file .Zip mới download về. 
   Xem chi tiết hướng dẫn cách cài đặt thư viện tại đây: https://www.arduino.cc/en/Guide/Libraries
-5. Khởi động lại Arduino IDE -> Vào File/Examples nếu thấy thư mục "otto" xuất hiện thì cài đặt thành công, Nạp các chương trình Example để khám phá các khả năng của OttoMinion Robot. 
+5. Khởi động lại Arduino IDE -> Vào File/Examples nếu thấy thư mục ZowiVbot" xuất hiện thì cài đặt thành công, Nạp các chương trình Example để khám phá các khả năng của ZowiVbot Robot. 
 
-Thư viện ZowiVbot được stembot.vn sửa đổi một số đoạn, tối giản hết sưacs và sắp xếp lại các files so với dự án gốc sao cho chỉ cần cài đặt 1 thư viện "OttoVbot" và khai báo file header <Otto.h> đầu chương trình là có thể sử dụng toàn bộ các thư viện con bên trong. Phương pháp này hạn chế lỗi biên dịch do thiếu các thư viện bổ sung thường gặp khi download từ dự án gốc. 
+Thư viện ZowiVbot được stembot.vn sửa đổi , tối giản và sắp xếp lại các files so với dự án gốc sao cho chỉ cần cài đặt 1 thư viện "ZowiVbot" và khai báo file header <ZowiVbot.h> đầu chương trình là có thể sử dụng toàn bộ các thư viện con bên trong. Phương pháp này hạn chế lỗi biên dịch do thiếu các thư viện bổ sung thường gặp khi download từ dự án gốc. 
