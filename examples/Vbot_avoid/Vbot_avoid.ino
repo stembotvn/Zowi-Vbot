@@ -1,76 +1,50 @@
 //----------------------------------------------------------------
-//-- Otto basic firmware v2 adapted from Zowi (ottodiy.com)
-//-- CC BY SA
-//-- 04 December 2016
+//-- Zowi-Vbot - An Wooden Bipedal Robot
+//-- Design by STEMbot.vn (http://stembot.vn/zowivbot) mixed from OttoDIY project with some modify in library
+//-- Example: Avoid obstacles, using SRF04 Sonar Sensor for measure Range in front, if there is obstacle with distance < 15 cm, stop and turn then keep going
+
 //-----------------------------------------------------------------
-//-- Otto will avoid obstacles with this code!
+//Chương trình mẫu thực hiện yêu cầu tránh vật cản, khi robot đang đi tiến về trước và phát hiện vật cản ở khoảng cách nhỏ hơn 15 Cm thì dừng lại và rẽ hướng khác. 
 //-----------------------------------------------------------------
-#include <Servo.h> 
-#include <Oscillator.h>
-#include <US.h>
-#include <Otto.h>
-Otto Otto;  //This is Otto!
+
+#include <ZowiVbot.h>
+
+ZowiVbot Vbot;  //my name is Vbot! Hello World!
 //---------------------------------------------------------
-//-- First step: Make sure the pins for servos are in the right position
-/*
-         --------------- 
-        |     O   O     |
-        |---------------|
-YR 3==> |               | <== YL 2
-         --------------- 
-            ||     ||
-RR 5==>   -----   ------  <== RL 4
-         |-----   ------|
-*/
-  #define PIN_YL 2 //servo[2]
-  #define PIN_YR 3 //servo[3]
-  #define PIN_RL 4 //servo[4]
-  #define PIN_RR 5 //servo[5]
+
 ///////////////////////////////////////////////////////////////////
 //-- Global Variables -------------------------------------------//
 ///////////////////////////////////////////////////////////////////
-//-- Movement parameters
-int T=1000;              //Initial duration of movement
-int moveId=0;            //Number of movement
-int moveSize=15;         //Asociated with the height of some movements
+
 //---------------------------------------------------------
-bool obstacleDetected = false;
 ///////////////////////////////////////////////////////////////////
 //-- Setup ------------------------------------------------------//
 ///////////////////////////////////////////////////////////////////
 void setup(){
   //Set the servo pins
-  Otto.init(PIN_YL,PIN_YR,PIN_RL,PIN_RR,true, -1, 10, 8, 9);
-  Otto.sing(S_connection); //Otto wake up!
-  Otto.home();
+  Vbot.init(HIP_L, HIP_R, FOOT_L, FOOT_R, false, PIN_NoiseSensor, PIN_Buzzer,PIN_Trigger, PIN_Echo);
+
+  Vbot.sing(S_connection); //Vbot wake up!
+  Vbot.home();
   delay(50);
-  Otto.sing(S_happy); // a happy Otto :)
+  Vbot.sing(S_happy); // a happy Vbot :)
 }
 ///////////////////////////////////////////////////////////////////
 //-- Principal Loop ---------------------------------------------//
 ///////////////////////////////////////////////////////////////////
 void loop() {
-  if(obstacleDetected){ 
-               Otto.sing(S_surprise); 
-               Otto.playGesture(OttoFretful); 
-               Otto.sing(S_fart3); 
-               Otto.walk(2,1300,-1); 
-               Otto.turn(2,1000,-1);                
+  if (Vbot.getDistance()<15) { 
+               Vbot.sing(S_surprise); 
+               Vbot.playGesture(VbotFretful); 
+               Vbot.sing(S_fart3); 
+               Vbot.walk(2,1300,-1); 
+               Vbot.turn(2,1000,-1);                
              delay(50); 
-             obstacleDetector(); 
+           
              }        
          else{ 
-            Otto.walk(1,1000,1); 
-            obstacleDetector(); 
+            Vbot.walk(1,1000,1); 
+           
         }           
   }  
 ///////////////////////////////////////////////////////////////////
-//-- Function to read distance sensor & to actualize obstacleDetected variable
-void obstacleDetector(){
-   int distance = Otto.getDistance();
-        if(distance<15){
-          obstacleDetected = true;
-        }else{
-          obstacleDetected = false;
-        }
-}
