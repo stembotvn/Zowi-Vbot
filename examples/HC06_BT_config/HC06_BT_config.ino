@@ -1,22 +1,12 @@
 /* 
-	http://giltesa.com/?p=11738
-	09/08/2012
-	(CC) BY-NC-SA: giltesa.com
-Modified by Pablo García pabloeweb@gmail.com for Otto DIY robot
-ConfigBluetooth HC-06 from Arduino.
-Change name, password and baud using serial port, with no user interaction. 
-1.- Upload this code to Arduino nano (no bluetooth module connected)
-2.- unplug USB
-3.- Connect HC-06
-4.- Power arduino from external power.
-5.- Wait for the Arduino´s onboard led to start blinking
-6.- Disconnect power. Everything is done.
 
+FIRMWARE TO CONFIG HC 06 FOR COMPATIBLE ZOWI APP
+USING FOR ZOWI-VBOT BOARD (STEMbot.vn)
 After upload code you have 10 seconds to connect the module
 BT ---- Arduino
 TX ----> RX
 RX <---- TX
-
+Turn on  Serial MOnitor (9600) to view Process, if configuration unsuccess, please try another baurate
 Once the LED off configuration will start and at the end LED will blink
 After this you can pair your module
 */
@@ -32,20 +22,28 @@ void setup()
 {
 	BT.begin(9600);		//9600bauds is the deafult baudrate for these modules.
 					//if it´s not working try changing this baudrate to match your HC-06 initial setup
-	
+	Serial.begin(9600);
 	    // Waiting time (10 seconds) onboard LED is ON:
+     Serial.println("CONFIG HC06 BLUETOOTH MODULE");
 		pinMode(ArduLED,OUTPUT);
 		digitalWrite(ArduLED,HIGH);
 		delay(10000);
 		digitalWrite(ArduLED,LOW);
 	
-Serial.print("AT"); delay(1000); // Now configuration start
+BT.print("AT"); 
+waitResponse();
+//delay(1000); // Now configuration start
+Serial.println("SET NAME: Zowi");
+BT.print("AT+NAME"); BT.print(ssid); delay(1000);   // Change Name of BT
+waitResponse();
+Serial.println("SET BAURATE: 9600");
 
-Serial.print("AT+NAME"); Serial.print(ssid); delay(1000);   // Change Name of BT
+BT.print("AT+BAUD"); BT.print(baudios); delay(1000);    // Change Baud
+waitResponse();
+Serial.println("SET PASS: 1234");
 
-Serial.print("AT+BAUD"); Serial.print(baudios); delay(1000);    // Change Baud
-
-Serial.print("AT+PIN"); Serial.print(password); delay(1000);	    // Change Password
+BT.print("AT+PIN"); BT.print(password); delay(1000);	    // Change Password
+waitResponse();
 }
 
 void loop()
@@ -53,4 +51,19 @@ void loop()
 	// After programing bluetooth, onboard LED will Blink.
 	digitalWrite(ArduLED, !digitalRead(ArduLED));
 	delay(500);
+}
+
+void waitResponse()
+{
+  // BT.flush();
+  String command = "";
+  while (BT.available()==0); 
+  while(BT.available()) { // While there is more to be read, keep reading.
+      command += (char)BT.read();    
+     // while (BT.available()==0);
+     delay(100);
+    } 
+   Serial.println(command);  
+
+
 }
