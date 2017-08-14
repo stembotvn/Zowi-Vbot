@@ -289,7 +289,7 @@ void receiveServo(){
 void receiveMovement(){
 
     sendAck();
-
+    Serial.print("Move Command: ");
     if (Vbot.getRestState()==true){
         Vbot.setRestState(false);
     }
@@ -298,7 +298,7 @@ void receiveMovement(){
     //M  MoveID  T   MoveSize  
     char *arg; 
     arg = SCmd.next(); 
-    if (arg != NULL) {moveId=atoi(arg);}
+    if (arg != NULL) {moveId=atoi(arg); Serial.println(moveId); Serial.print(" ");}
     else{
 //      Vbot.putMouth(xMouth);
       delay(2000);
@@ -307,15 +307,15 @@ void receiveMovement(){
     }
     
     arg = SCmd.next(); 
-    if (arg != NULL) {T=atoi(arg);}
+    if (arg != NULL) {T=atoi(arg); Serial.println(T); Serial.print(" ");}
     else{
       T=1000;
     }
 
     arg = SCmd.next(); 
-    if (arg != NULL) {moveSize=atoi(arg);}
+    if (arg != NULL) {moveSize=atoi(arg); Serial.println(moveSize); Serial.print(" ");}
     else{
-      moveSize =15;
+      moveSize =20;
     }
 }
 
@@ -342,7 +342,7 @@ void move(int moveId){
       Vbot.turn(1,T,-1);
       break;
     case 5: //M 5 1000 30 
-      Vbot.updown(1,T,moveSize);
+      Vbot.updown(1,T,30);
       break;
     case 6: //M 6 1000 30
       Vbot.moonwalker(1,T,moveSize,1);
