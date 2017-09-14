@@ -46,10 +46,11 @@ void Oscillator::attach(int pin, bool rev)
       _servo.write(90);
 
       //-- Initialization of oscilaltor parameters
+     // _T = 30;
       _TS=30;
       _T=2000;
-      _N = _T/_TS;
-      _inc = 2*M_PI/_N;
+      _N = _T/_TS;           //////
+      _inc = 2*M_PI/_N;      //////
 
       _previousMillis=0;
 
@@ -112,7 +113,7 @@ void Oscillator::refresh()
       //-- If the oscillator is not stopped, calculate the servo position
       if (!_stop) {
         //-- Sample the sine function and set the servo pos
-         _pos = round(_A * sin(_phase + _phase0) + _O);
+         _pos = round(_A * sin(_phase + _phase0) + _O);  ///
 	       if (_rev) _pos=-_pos;
          _servo.write(_pos+90+_trim);
       }

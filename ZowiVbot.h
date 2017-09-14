@@ -26,9 +26,10 @@
 #define PIN_Buzzer  A2
 #define PIN_Trigger 9
 #define PIN_Echo    10
-#define PIN_NoiseSensor A6
-#define BT_Rx   7  
-#define BT_Tx   8
+#define PIN_NoiseSensor 6
+#define PIN_Servo_Enable  A3
+#define BT_Rx   8  
+#define BT_Tx   7
 
 #define HIP_L   2
 #define FOOT_L  3
@@ -61,7 +62,7 @@ class ZowiVbot
     
     //-- Predetermined Motion Functions
     void jump(float steps=1, int T = 2000);
-
+    
     void walk(float steps=4, int T=1000, int dir = FORWARD);
     void turn(float steps=4, int T=2000, int dir = LEFT);
     void bend (int steps=1, int T=1400, int dir=LEFT);

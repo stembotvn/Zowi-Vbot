@@ -1,22 +1,23 @@
 //----------------------------------------------------------------
-//
-//Zowi_Vbot Default Firmware 
-//Modified from Zowi Vbot Firmware 
-//Comatible with Zowi APP, a very fun Smartphone app for programming Zowi Vbot
-//Link Android APP: https://play.google.com/store/apps/details?id=com.bq.
-// This Firmware also compatible with Mblock SoftWare in Scratch Mode (using online programming in Scratch Language, must always connect to PC to programming and run)
+//Zowi_Vbot Firmware 
+//Using with Mblock software in Scratch Mode or online Mode (Run program in Scratch and sync with Robot) 
+//This code is use for programming robot via Serial USB Cable connected to robot (do not unplug cable during playing)
+//For Wireless Programming Scratch mode, please upload the Vbot_BT_ZowiAPP.ino in the Examples, this firmware can compatible both Android App and MBlock Scratch Bluetooth
+//Scratch Mode is progamming with Computer and Mblock software difference than Arduino mode (interpretter to Arduino code and upload to robot, it can run offline without PC )
 //Suitable for kids from 5-15 years old - Enjoy 
 //Created and Modified by Hien Phan - Aug,6,2017
-// Visit http://stembot.vn for more detail
+//visit http://stembot.vn for more detail
 //-----------------------------------------------------------------
 
 //-- Vbot Library
 #include <ZowiVbot.h>
-#include "SoftSerialCommand.h"
+#include "ZowiSerialCommand.h"
+
+ZowiSerialCommand SCmd; //The SerialCommand object
+
 ZowiVbot Vbot;  //my name is Vbot! Hello World!
 
-SoftwareSerial BT = SoftwareSerial(BT_Rx,BT_Tx); 
-SoftSerialCommand SCmd(BT); //The SerialCommand object
+
 
 //---------------------------------------------------------
 
@@ -26,14 +27,15 @@ SoftSerialCommand SCmd(BT); //The SerialCommand object
 //-- Global Variables -------------------------------------------//
 ///////////////////////////////////////////////////////////////////
 const char programID[]="ZOWI_BASE_v2";
+//const char programID[]="Zowi_Vbot"; //Each program will have a ID
 
 const char name_fac='$'; //Factory name
 const char name_fir='#'; 
 
 //-- Movement parameters
-int T=1000;              //Initial duration of movement -> show the speed of movement
-int moveId=0;            //type of movement
-int moveSize=15;         //Size of movement (amplitude of movement)
+int T=1000;              //Initial duration of movement, show the speed
+int moveId=0;            //Type of movement
+int moveSize=15;         //Size of movement
 
 unsigned long previousMillis=0;
 
@@ -49,8 +51,8 @@ bool obstacleDetected = false;
 void setup(){
 
   //Serial communication initialization
-  BT.begin(9600);  //init for Bluetooth HC-06 interface via Software Serial 
-  Serial.begin(9600); //init for Serial interface for Debug data in PC 
+  //BT.begin(9600);  
+  Serial.begin(9600);
   
     Vbot.init(HIP_L, HIP_R, FOOT_L, FOOT_R, false, PIN_NoiseSensor, PIN_Buzzer,PIN_Trigger, PIN_Echo);
      
@@ -82,16 +84,29 @@ void setup(){
   Vbot.sing(S_connection);
   Vbot.home();
   delay(50);
-  Serial.println("Zowi Started");
- 
+ // Serial.println("Zowi Started");
+  //If Vbot's name is '&' (factory name) means that is the first time this program is executed.
+  //This first time, Vbot mustn't do anything. Just born at the factory!
+  //5 = EEPROM address that contains first name character
+  /*if (EEPROM.read(5)==name_fac){ 
+
+    EEPROM.put(5, name_fir); //From now, the name is '#'
+    EEPROM.put(6, '\0'); 
+    //Vbot.putMouth(culito);
+
+    while(true){    
+       delay(1000);
+    }
+  }  
+*/
   //Send Vbot name, programID & battery level.
   requestName();
   delay(50);
   requestProgramId();
   delay(50);
   requestBattery();
-  Serial.println("Sent Name");
-  
+ //   Serial.println("Sent Name");
+
   //Checking battery
   LowBatteryAlarm();
    Vbot.sing(S_happy);
@@ -124,7 +139,7 @@ void setup(){
 ///////////////////////////////////////////////////////////////////
 void loop() {
 
-  if (BT.available() > 0) {
+  if (Serial.available() > 0) {
    // Vbot.putMouth(happyOpen);
   //  Serial.print(BT.read());
     SCmd.readSerial();
@@ -277,7 +292,7 @@ void receiveServo(){
 void receiveMovement(){
 
     sendAck();
-    Serial.print("Move Command: ");
+  //  Serial.print("Move Command: ");
     if (Vbot.getRestState()==true){
         Vbot.setRestState(false);
     }
@@ -286,7 +301,7 @@ void receiveMovement(){
     //M  MoveID  T   MoveSize  
     char *arg; 
     arg = SCmd.next(); 
-    if (arg != NULL) {moveId=atoi(arg); Serial.println(moveId); Serial.print(" ");}
+    if (arg != NULL) {moveId=atoi(arg);}// Serial.println(moveId); Serial.print(" ");}
     else{
 //      Vbot.putMouth(xMouth);
       delay(2000);
@@ -295,20 +310,20 @@ void receiveMovement(){
     }
     
     arg = SCmd.next(); 
-    if (arg != NULL) {T=atoi(arg); Serial.println(T); Serial.print(" ");}
+    if (arg != NULL) {T=atoi(arg);} //Serial.println(T); Serial.print(" ");}
     else{
       T=1000;
     }
 
     arg = SCmd.next(); 
-    if (arg != NULL) {moveSize=atoi(arg); Serial.println(moveSize); Serial.print(" ");}
+    if (arg != NULL) {moveSize=atoi(arg);}// Serial.println(moveSize); Serial.print(" ");}
     else{
       moveSize =30;
     }
 }
 
 
-//-- Function to execute the right movement according the movement command received.
+//-- Function to execute the right movement according the movement command received.///
 void move(int moveId){
 
   bool manualMode = false;
@@ -333,11 +348,11 @@ void move(int moveId){
       Vbot.updown(1,T,30);
       break;
     case 6: //M 6 1000 30
-	  moveSize =30;
+      moveSize = 30;
       Vbot.moonwalker(1,T,moveSize,1);
       break;
     case 7: //M 7 1000 30
-      moveSize =30;
+      moveSize = 30;
       Vbot.moonwalker(1,T,moveSize,-1);
       break;
     case 8: //M 8 1000 30
@@ -345,27 +360,27 @@ void move(int moveId){
       Vbot.swing(1,T,moveSize);
       break;
     case 9: //M 9 1000 30 
-	  moveSize =30;
-      Vbot.crusaito(1,T,moveSize,1);
+      moveSize =30;
+	  Vbot.crusaito(1,T,moveSize,1);
       break;
-    case 10: //M 10 1000 30
-      moveSize =30;	
-      Vbot.crusaito(1,T,moveSize,-1);
+    case 10: //M 10 1000 30 
+      moveSize =30;
+	  Vbot.crusaito(1,T,moveSize,-1);
       break;
     case 11: //M 11 1000 
       Vbot.jump(1,T);
       break;
-    case 12: //M 12 1000 30
-	  moveSize =30;
-      Vbot.flapping(1,T,moveSize,1);
+    case 12: //M 12 1000 30 
+      moveSize =30;
+	  Vbot.flapping(1,T,moveSize,1);
       break;
     case 13: //M 13 1000 30
-	  moveSize =30;
-      Vbot.flapping(1,T,moveSize,-1);
+      moveSize =30;
+	  Vbot.flapping(1,T,moveSize,-1);
       break;
     case 14: //M 14 1000 20
-	  moveSize = 20;
-      Vbot.tiptoeSwing(1,T,moveSize);
+      moveSize =30;
+	  Vbot.tiptoeSwing(1,T,moveSize);
       break;
     case 15: //M 15 500 
       Vbot.bend(1,T,1);
@@ -380,11 +395,10 @@ void move(int moveId){
       Vbot.shakeLeg(1,T,-1);
       break;
     case 19: //M 19 500 20
-	  moveSize =30;
-      Vbot.jitter(1,T,moveSize);
+      moveSize =30;
+	  Vbot.jitter(1,T,moveSize);
       break;
     case 20: //M 20 500 15
-	  moveSize =30;
       Vbot.ascendingTurn(1,T,moveSize);
       break;
     default:
@@ -392,7 +406,7 @@ void move(int moveId){
       break;
   }
 
-  if(!manualMode){
+  if (!manualMode){
     sendFinalAck();
   }
        
@@ -599,11 +613,11 @@ void requestName(){
     //Get the float data from the EEPROM at position 'eeAddress'
   //  EEPROM.get(eeAddress, actualVbotName);
 
-    BT.print(F("&&"));
-    BT.print(F("E "));
-    BT.print(actualVbotName);
-    BT.println(F("%%"));
-    BT.flush();
+    Serial.print(F("&&"));
+    Serial.print(F("E "));
+    Serial.print(actualVbotName);
+    Serial.println(F("%%"));
+    Serial.flush();
 }
 
 
@@ -613,11 +627,11 @@ void requestDistance(){
     Vbot.home();  //stop if necessary  
 
     int distance = Vbot.getDistance();
-    BT.print(F("&&"));
-    BT.print(F("D "));
-    BT.print(distance);
-    BT.println(F("%%"));
-    BT.flush();
+    Serial.print(F("&&"));
+    Serial.print(F("D "));
+    Serial.print(distance);
+    Serial.println(F("%%"));
+    Serial.flush();
 }
 
 
@@ -627,11 +641,11 @@ void requestNoise(){
     Vbot.home();  //stop if necessary
 
     int microphone= Vbot.getNoise(); //analogRead(PIN_NoiseSensor);
-    BT.print(F("&&"));
-    BT.print(F("N "));
-    BT.print(microphone);
-    BT.println(F("%%"));
-    BT.flush();
+    Serial.print(F("&&"));
+    Serial.print(F("N "));
+    Serial.print(microphone);
+    Serial.println(F("%%"));
+    Serial.flush();
 }
 
 
@@ -643,11 +657,11 @@ void requestBattery(){
     //The first read of the batery is often a wrong reading, so we will discard this value. 
     double batteryLevel = Vbot.getBatteryLevel();
 
-    BT.print(F("&&"));
-    BT.print(F("B "));
-    BT.print(batteryLevel);
-    BT.println(F("%%"));
-    BT.flush();
+    Serial.print(F("&&"));
+    Serial.print(F("B "));
+    Serial.print(batteryLevel);
+    Serial.println(F("%%"));
+    Serial.flush();
 }
 
 
@@ -656,11 +670,11 @@ void requestProgramId(){
 
     Vbot.home();   //stop if necessary
 
-    BT.print(F("&&"));
-    BT.print(F("I "));
-    BT.print(programID);
-    BT.println(F("%%"));
-    BT.flush();
+    Serial.print(F("&&"));
+    Serial.print(F("I "));
+    Serial.print(programID);
+    Serial.println(F("%%"));
+    Serial.flush();
 }
 
 
@@ -669,10 +683,10 @@ void sendAck(){
 
   delay(30);
 
-  BT.print(F("&&"));
-  BT.print(F("A"));
-  BT.println(F("%%"));
-  BT.flush();
+  Serial.print(F("&&"));
+  Serial.print(F("A"));
+  Serial.println(F("%%"));
+  Serial.flush();
 }
 
 
@@ -681,10 +695,10 @@ void sendFinalAck(){
 
   delay(30);
 
-  BT.print(F("&&"));
-  BT.print(F("F"));
-  BT.println(F("%%"));
-  BT.flush();
+  Serial.print(F("&&"));
+  Serial.print(F("F"));
+  Serial.println(F("%%"));
+  Serial.flush();
 }
 
 //-- Functions with animatics

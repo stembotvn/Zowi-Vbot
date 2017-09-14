@@ -8,8 +8,7 @@
 
 
 #include "ZowiVbot.h"
-//#include "Oscillator.h"
-//#include "US.h"
+
 
 
 
@@ -19,7 +18,7 @@ void ZowiVbot::init(int YL, int YR, int RL, int RR, bool load_calibration, int N
   servo_pins[1] = YR;
   servo_pins[2] = RL;
   servo_pins[3] = RR;
-
+ 
   attachServos();
   isOttoResting=false;
 
@@ -32,7 +31,8 @@ void ZowiVbot::init(int YL, int YR, int RL, int RR, bool load_calibration, int N
   }
   
   for (int i = 0; i < 4; i++) servo_position[i] = 90;
-
+   pinMode(PIN_Servo_Enable,OUTPUT);  
+   digitalWrite(PIN_Servo_Enable,LOW);
   //US sensor init with the pins:
   us.init(USTrigger, USEcho);
 
@@ -206,9 +206,9 @@ void ZowiVbot::walk(float steps, int T, int dir){
   //--      -90 : Walk forward
   //--       90 : Walk backward
   //-- Feet servos also have the same offset (for tiptoe a little bit)
-  int A[4]= {30, 30, 20, 20};
-  int O[4] = {0, 0, 4, -4};
-  double phase_diff[4] = {0, 0, DEG2RAD(dir * -90), DEG2RAD(dir * -90)};
+  int A[4]= {30, 30, 25, 25};
+  int O[4] = {0, 0, 4, -4}; 
+  double phase_diff[4] = {0, 0, DEG2RAD(dir * -90), DEG2RAD(dir * -90)};   
 
   //-- Let's oscillate the servos!
   _execute(A, O, T, phase_diff, steps);  
@@ -257,8 +257,11 @@ void ZowiVbot::turn(float steps, int T, int dir){
 void ZowiVbot::bend (int steps, int T, int dir){
 
   //Parameters of all the movements. Default: Left bend
-  int bend1[4]={90, 90, 62, 35}; 
-  int bend2[4]={90, 90, 62, 105};
+  //int bend1[4]={90, 90, 58, 35}; 
+  int bend1[4]={90, 90, 56, 33}; 
+  int bend2[4]={90, 90, 56, 105};
+  //int bend1[4]={90, 90, 60, 60}; 
+  //int bend2[4]={90, 90, 45, 105};
   int homes[4]={90, 90, 90, 90};
 
   //Time of one bend, constrained in order to avoid movements too fast.
@@ -267,21 +270,29 @@ void ZowiVbot::bend (int steps, int T, int dir){
   //Changes in the parameters if right direction is chosen 
   if(dir==-1)
   {
-    bend1[2]=180-35;
-    bend1[3]=180-60;  //Not 65. Otto is unbalanced
+    bend1[2]=180-28;
+    bend1[3]=180-56;  //Not 65. Otto is unbalanced
+    //bend1[3]=180-70;
     bend2[2]=180-105;
-    bend2[3]=180-60;
+    bend2[3]=180-56;
+
+   // bend1[2]=180-60;
+   // bend1[3]=180-60;  //Not 65. Otto is unbalanced
+   // bend2[2]=180-105;
+   // bend2[3]=180-45;
   }
 
   //Time of the bend movement. Fixed parameter to avoid falls
-  int T2=800; 
-
+  int T2=1000; 
+  //  int T2 = 1000;
   //Bend movement
   for (int i=0;i<steps;i++)
   {
     _moveServos(T2/2,bend1);
     _moveServos(T2/2,bend2);
-    delay(T*0.8);
+   delay(T*0.8);
+  // delay(T*2);
+
     _moveServos(500,homes);
   }
 
@@ -302,19 +313,19 @@ void ZowiVbot::shakeLeg (int steps,int T,int dir){
 
   //Parameters of all the movements. Default: Right leg
   int shake_leg1[4]={90, 90, 58, 35};   
-  int shake_leg2[4]={90, 90, 58, 120};
+  int shake_leg2[4]={90, 90, 62, 120};
   int shake_leg3[4]={90, 90, 58, 60};
   int homes[4]={90, 90, 90, 90};
 
   //Changes in the parameters if left leg is chosen
   if(dir==-1)      
   {
-    shake_leg1[2]=180-35;
-    shake_leg1[3]=180-58;
+    shake_leg1[2]=180-30;
+    shake_leg1[3]=180-55;
     shake_leg2[2]=180-120;
-    shake_leg2[3]=180-58;
+    shake_leg2[3]=180-55;
     shake_leg3[2]=180-60;
-    shake_leg3[3]=180-58;
+    shake_leg3[3]=180-55;
   }
   
   //Time of the bend movement. Fixed parameter to avoid falls
@@ -856,7 +867,7 @@ void ZowiVbot::sing(int songName){
 
 void ZowiVbot::playGesture(int gesture){
 
-  int sadPos[4]=      {110, 70, 20, 160};
+  int sadPos[4]=      {110, 70, 40, 140};
   int bedPos[4]=      {100, 80, 60, 120};
   int fartPos_1[4]=   {90, 90, 145, 122}; //rightBend
   int fartPos_2[4]=   {90, 90, 80, 122};
