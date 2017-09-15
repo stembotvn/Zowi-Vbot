@@ -12,7 +12,7 @@ Bộ lắp ghép Zowi-Vbot có thể order tại: http://stembot.vn/products/zow
 
 ## Installation - Lắp đặt phần khung
 Làm theo hướng dẫn tải tại link: http://stembot.vn/products/zowivbot
-Với các sản phẩm Full Combo kit, Arduino Board được stembot.vn nạp sẵn firmware BluetoothAPP, khi bật nguồn lên tất cả Servo sẽ tự động trở về vị trí gốc sau tiếng còi báo, vì vậy không cần thiết phải nạp chương trình OTTO_ServoHome để cân chỉnh vị trí gốc servo. 
+Với các sản phẩm Full Combo kit, Arduino Board được stembot.vn nạp sẵn firmware BluetoothAPP, khi bật nguồn lên tất cả Servo sẽ tự động trở về vị trí cân bằng sau tiếng còi báo.
 
 ## Programming 
 Zowi-Vbot được build để có thể lập trình bằng ngôn ngữ C/C++ Arduino, Scratch Mblock và Graphical Block từ Android App Zowi dành cho các đối tượng mới tiếp cận với lập trình . Phiên bản hiện tại chỉ mới cơ bản ở ngôn ngữ Arduino C/C++ kết hợp với APP Zowi. 
@@ -29,10 +29,45 @@ Zowi-Vbot được build để có thể lập trình bằng ngôn ngữ C/C++ A
   *  Để lập trình bằng ngôn ngữ Scratch trong môi trường Mblock thông qua cáp USBSerial, cần nạp chương trình Examples/ZowiVbot/Vbot_Mblock_inScratchMode.ino
   *  Để tiến hành config cho module Bluetooth HC 06 có thể tương thích với Zowi App, cần nạp chương trình Examples/ZowiVbot/HC06_BT_config.ino và bật Serial Monitor để quan sát quá trình. 
   *  Để test chương trình Demo tránh vật cản sử dụng cảm biến siêu âm SRF04, nạp chương trình: Examples/ZowiVbot/Vbot_avoid.ino  
-  *  Để chạy các Demo về nhảy một số bài nhạc của Michael Jackson, sử dụng các chương trình: Examples/ZowiVbot/Dance/.....
+## Arduino Code: Khởi tạo robot và sử dụng các hàm chính
+### Khởi tạo
 
-    
-  
+#include <ZowiVbot.h>
+ZowiVbot Vbot;  //tạo một đối tượng từ lớp ZowiVbot, ví dụ tên là Vbot, có thể đặt tên tùy ý
+ void setup(){
+  //Set the servo pins
+  Vbot.init(HIP_L, HIP_R, FOOT_L, FOOT_R, false, PIN_NoiseSensor, PIN_Buzzer,PIN_Trigger, PIN_Echo);  // khởi tạo phần cứng cho robot
+  Vbot.home();    // đưa các khớp của robot về vị trí cân bằng, Robot vào trạng thái nghỉ. 
+  delay(50);
+}
+### Sử dụng các hàm chính
+Vbot.home(); // trở về trạng thái nghỉ, các khớp về vị trí cân bằng
+#### Các hàm chuyển động Robot
+Vbot.jump(step,Time);//động tác nhảy lên và đáp xuống với tham số step (interger) là số bước, Time: thời gian thực thi mỗi bước
+Vbot.walk(step,Time, Dir);// Động tác đi bộ Dir = FORWARD (tới) hoặc BACKWARD (lui)
+Vbot.turn(step,Time, Dir);// động tác rẽ, Dir: LEFT, RIGHT
+Vbot.bend(step,Time, Dir);// động tác nghiên qua một bên đứng một chân, DIR = LEFT, RIGHT
+Vbot.ShakeLeg(step,Time, Dir);// động tác nghiên một bên đứng một chân và vẫy chân còn lại DIR = LEFT, RIGHT
+Vbot.updown(Step,Time,H) ; // động tác nhún lên xuống với H là biên độ nhún đơn vị là góc quay của bàn chân (độ) (cao hay thấp).
+Vbot.swing(Step,Time,H); //động tác lắc lư, tham số tương tự như trên 
+Vbot.tiptoeSwing(Step,Time,H); //động tác vừa lắc vừa nhún, tham số tương tự như trên
+Vbot.jitter(Step,Time,H); //động tác hoảng loạng, xoay hai bàn chân cúm vào nhau
+Vbot.ascendingTurn(Step,Time,H);  //động tác xoay cúm chân vào nhau và nhún lên
+Vbot.moonwalker(Step,Time, H, Dir); //động tác đi không trọng lực của Michael Jackson, với DIR = LEFT, RIGHT
+Vbot.crusaito(Step,Time,H,Dir); //động tác vui mừng nhảy cởn lên (DIR = FORWARD,BACKWARD)
+Vbot.flapping(Step,Time,H,Dir); //động tác vỗ cánh bằng chân, DIR = FORWARD,BACKWARD)
+/////////////////////////////////////////////////
+#### Các hàm tương tác với cảm biên
+float distance = Vbot.getDistance(); //đọc cảm biến khoản cách SRF04 và gán vào biến kiểu float là distance (đơn vị Cm); 
+int noise = getNoise(); //đọc cảm biến âm thanh và gán vào biến noise (kiểu int) -> biểu diễn mức âm thanh 
+double batteryLevel = getBatteryLevel(); //đọc mức Pin (%) 
+double batteryVoltae = getBatteryVoltage(); //đọc điện áp Pin
+#### Các hàm 
+Vbot.sing(songname); //với songname = S_connection, S_disconnection 
+
+
+
+
 
 
 Thư viện ZowiVbot được stembot.vn sửa đổi , tối giản và sắp xếp lại các files so với dự án gốc sao cho chỉ cần cài đặt 1 thư viện "ZowiVbot" và khai báo file header <ZowiVbot.h> đầu chương trình là có thể sử dụng toàn bộ các thư viện con bên trong. Phương pháp này hạn chế lỗi biên dịch do thiếu các thư viện bổ sung thường gặp khi download từ dự án gốc. 
