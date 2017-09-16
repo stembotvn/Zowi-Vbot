@@ -32,7 +32,7 @@ Zowi-Vbot được build để có thể lập trình bằng ngôn ngữ C/C++ A
 ## Arduino Code: Khởi tạo robot và sử dụng các hàm chính
 ### Khởi tạo
 ```
-#include <ZowiVbot.h>
+#include <ZowiVbot.h>  // khai báo thư viện cho ZowiVbot
 ZowiVbot Vbot;  //tạo một đối tượng từ lớp ZowiVbot, ví dụ tên là Vbot, có thể đặt tên tùy ý
  void setup(){
   //Set the servo pins
@@ -106,7 +106,8 @@ Vbot.sing(songname); // Phát ra tiếng kêu với tham số là songname
 ```
 ```
 Macro cho songname: 
-với songname = S_connection, S_disconnection, S_buttonPushed,S_surprise, S_OhOoh, _OhOoh2, Scuddly, S_sleeping, S_happy, S_superHappy, S_happy_short, S_sad, S_confused, S_fart1, S_fart2, S_fart3
+với songname = S_connection, S_disconnection, S_buttonPushed,S_surprise, S_OhOoh, _OhOoh2, Scuddly,
+S_sleeping, S_happy, S_superHappy, S_happy_short, S_sad, S_confused, S_fart1, S_fart2, S_fart3
 ```
 
 ```
@@ -115,10 +116,8 @@ Vbot.playGesture(gesture); // Thể hiện một hành vi nào đó..tham số l
 ```
 ```
 Macro cho gesture: 
-gesture = RobotHappy, RobotSuperHappy, RobotSad, RobotSleeping, RobotFart, RobotConfused, RobotLove, RobotAngry, RobotFretful, RobotMagic, RobotWave, RobotVictory, RobotFail
+gesture = RobotHappy, RobotSuperHappy, RobotSad, RobotSleeping, RobotFart, RobotConfused,
+RobotLove, RobotAngry, RobotFretful, RobotMagic, RobotWave, RobotVictory, RobotFail
 ```
-
-
-
-
-Thư viện ZowiVbot được stembot.vn sửa đổi , tối giản và sắp xếp lại các files so với dự án gốc sao cho chỉ cần cài đặt 1 thư viện "ZowiVbot" và khai báo file header <ZowiVbot.h> đầu chương trình là có thể sử dụng toàn bộ các thư viện con bên trong. Phương pháp này hạn chế lỗi biên dịch do thiếu các thư viện bổ sung thường gặp khi download từ dự án gốc. 
+CHÚC CÁC BẠN THỰC HÀNH VUI VẺ VÀ HỨNG THÚ SÁNG TẠO RA NHỮNG VỞ KỊCH HAY, ĐIỆU NHẢY ĐẸP VỚI ROBOT NÀY.
+STEMBOT Development team
