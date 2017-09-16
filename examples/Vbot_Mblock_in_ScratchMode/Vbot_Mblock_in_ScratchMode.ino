@@ -54,11 +54,8 @@ void setup(){
   //BT.begin(9600);  
   Serial.begin(9600);
   
-    Vbot.init(HIP_L, HIP_R, FOOT_L, FOOT_R, false, PIN_NoiseSensor, PIN_Buzzer,PIN_Trigger, PIN_Echo);
-     
-   //Uncomment this to set the servo trims manually and save on EEPROM 
-    //Vbot.setTrims(TRIM_YL, TRIM_YR, TRIM_RL, TRIM_RR);
-    //Vbot.saveTrimsOnEEPROM(); //Uncomment this only for one upload when you finaly set the trims.
+  Vbot.init(HIP_L, HIP_R, FOOT_L, FOOT_R, false, PIN_NoiseSensor, PIN_Buzzer,PIN_Trigger, PIN_Echo);
+
 
   //Set a random seed
   randomSeed(analogRead(A6));
@@ -80,25 +77,11 @@ void setup(){
   SCmd.addCommand("I", requestProgramId);
   SCmd.addDefaultHandler(receiveStop);
 
-  //Vbot wake up!
+  //Vbot wake up sound!
   Vbot.sing(S_connection);
   Vbot.home();
   delay(50);
- // Serial.println("Zowi Started");
-  //If Vbot's name is '&' (factory name) means that is the first time this program is executed.
-  //This first time, Vbot mustn't do anything. Just born at the factory!
-  //5 = EEPROM address that contains first name character
-  /*if (EEPROM.read(5)==name_fac){ 
 
-    EEPROM.put(5, name_fir); //From now, the name is '#'
-    EEPROM.put(6, '\0'); 
-    //Vbot.putMouth(culito);
-
-    while(true){    
-       delay(1000);
-    }
-  }  
-*/
   //Send Vbot name, programID & battery level.
   requestName();
   delay(50);
@@ -109,28 +92,9 @@ void setup(){
 
   //Checking battery
   LowBatteryAlarm();
-   Vbot.sing(S_happy);
-    delay(200);
+  Vbot.sing(S_happy);
+  delay(200);
  // Animation Uuuuuh - A little moment of initial surprise
-
-  
-
-  //If Vbot's name is '#' means that Vbot hasn't been baptized
-  //In this case, Vbot does a longer greeting
-  //5 = EEPROM address that contains first name character
- /* 
-  if (EEPROM.read(5)==name_fir){ 
-    Vbot.jump(1,700);
-    delay(200); 
-    Vbot.shakeLeg(1,T,1);   
-   // Vbot.putMouth(smallSurprise);
-    Vbot.swing(2,800,20);  
-    Vbot.home();
-  }
-*/
-  
-
- previousMillis = millis();
 
 }
 
@@ -140,8 +104,7 @@ void setup(){
 void loop() {
 
   if (Serial.available() > 0) {
-   // Vbot.putMouth(happyOpen);
-  //  Serial.print(BT.read());
+
     SCmd.readSerial();
   
     //If Vbot is moving yet
@@ -231,7 +194,7 @@ void recieveBuzzer(){
 void receiveTrims(){  
 
     //sendAck & stop if necessary
-   // sendAck();
+    sendAck();
     Vbot.home(); 
     Vbot.sing(S_confused);
     //Vbot.playGesture(RobotConfused);// Indicate that Function not availabe for this version
@@ -569,35 +532,9 @@ void receiveSing(){
 //-- Function to receive Name command
 void receiveName(){
 
-    //sendAck & stop if necessary
-    //sendAck();
     Vbot.home(); 
     Vbot.sing(S_confused); //deny to receive command changing the name. 
-    /*
-    char newVbotName[11] = "";  //Variable to store data read from Serial.
-    int eeAddress = 5;          //Location we want the data to be in EEPROM.
-    char *arg; 
-    arg = SCmd.next(); 
-    
-    if (arg != NULL) {
 
-      //Complete newVbotName char string
-      int k = 0;
-      while((*arg) && (k<11)){ 
-          newVbotName[k]=*arg++;
-          k++;
-      }
-      
-      EEPROM.put(eeAddress, newVbotName); 
-    }
-    else 
-    {
-      //Vbot.putMouth(xMouth);
-      delay(2000);
-     // Vbot.clearMouth();
-    }
-      */
-  //  sendFinalAck();
 
 }
 
@@ -608,10 +545,7 @@ void requestName(){
     Vbot.home(); //stop if necessary
 
     char actualVbotName[11]= "Zowi";  //Variable to store data read from EEPROM.
- //   int eeAddress = 5;            //EEPROM address to start reading from
-
-    //Get the float data from the EEPROM at position 'eeAddress'
-  //  EEPROM.get(eeAddress, actualVbotName);
+ 
 
     Serial.print(F("&&"));
     Serial.print(F("E "));
@@ -707,13 +641,11 @@ void LowBatteryAlarm(){
     double batteryLevel = Vbot.getBatteryLevel();
 
     if(batteryLevel<45){
-      //Vbot.putMouth(thunder);
       Vbot.bendTones (880, 2000, 1.04, 8, 3);  //A5 = 880
       
       delay(30);
       
       Vbot.bendTones (2000, 880, 1.02, 8, 3);  //A5 = 880
-      //Vbot.clearMouth();
       delay(500);     
     }
 }

@@ -8,7 +8,16 @@ TX ----> RX
 RX <---- TX
 Turn on  Serial MOnitor (9600) to view Process, if configuration unsuccess, please try another baurate
 Once the LED off configuration will start and at the end LED will blink
-After this you can pair your module
+After this you can pair your module////////////////////////////////////////////////////////////
+///////////////////////////////////////
+////////////////////////////////////////
+CHƯƠNG TRÌNH NÀY ĐƯỢC VIẾT RA ĐỂ CONFIG CHO MODULE BLUETOOTH HC-06 GỐC ĐỂ ROBOT ZOWI CÓ THỂ TƯƠNG THÍCH VỚI ANDROID ZOWI APP 
+LUU Ý: VỚI MODULE ĐI KÈM THEO COMBO DO STEMBOT.VN CUNG CẤP, MODULE HC-06 ĐÃ ĐƯỢC CONFIG SẴN, KHÔNG CẦN PHẢI LOAD CHƯƠNG TRÌNH NÀY
+SỬ DỤNG:
+UPLOAD CHƯƠNG TRÌNH VÀO ROBOT
+BẬT SERIAL MONITOR LÊN ĐỂ THEO DÕI QUÁ TRÌNH. 
+
+Created by Hien Phan, Aug 2017
 */
 // Options:
 #include <SoftwareSerial.h>

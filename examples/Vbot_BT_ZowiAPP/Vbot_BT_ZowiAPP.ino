@@ -33,7 +33,7 @@ const char name_fir='#';
 //-- Movement parameters
 int T=1000;              //Initial duration of movement -> show the speed of movement
 int moveId=0;            //type of movement
-int moveSize=15;         //Size of movement (amplitude of movement)
+int moveSize=30;         //Size of movement (amplitude of movement)
 
 unsigned long previousMillis=0;
 
@@ -53,12 +53,7 @@ void setup(){
   Serial.begin(9600); //init for Serial interface for Debug data in PC 
   
     Vbot.init(HIP_L, HIP_R, FOOT_L, FOOT_R, false, PIN_NoiseSensor, PIN_Buzzer,PIN_Trigger, PIN_Echo);
-     
-   //Uncomment this to set the servo trims manually and save on EEPROM 
-    //Vbot.setTrims(TRIM_YL, TRIM_YR, TRIM_RL, TRIM_RR);
-    //Vbot.saveTrimsOnEEPROM(); //Uncomment this only for one upload when you finaly set the trims.
 
-  //Set a random seed
   randomSeed(analogRead(A6));
 
   //Setup callbacks for SerialCommand commands 
@@ -96,24 +91,7 @@ void setup(){
   LowBatteryAlarm();
    Vbot.sing(S_happy);
     delay(200);
- // Animation Uuuuuh - A little moment of initial surprise
-
-  
-
-  //If Vbot's name is '#' means that Vbot hasn't been baptized
-  //In this case, Vbot does a longer greeting
-  //5 = EEPROM address that contains first name character
- /* 
-  if (EEPROM.read(5)==name_fir){ 
-    Vbot.jump(1,700);
-    delay(200); 
-    Vbot.shakeLeg(1,T,1);   
-   // Vbot.putMouth(smallSurprise);
-    Vbot.swing(2,800,20);  
-    Vbot.home();
-  }
-*/
-  
+ 
 
  previousMillis = millis();
 
@@ -216,7 +194,7 @@ void recieveBuzzer(){
 void receiveTrims(){  
 
     //sendAck & stop if necessary
-   // sendAck();
+    sendAck();
     Vbot.home(); 
     Vbot.sing(S_confused);
     //Vbot.playGesture(RobotConfused);// Indicate that Function not availabe for this version
@@ -257,9 +235,7 @@ void receiveServo(){
     
     if(error==true){
 
-//      Vbot.putMouth(xMouth);
       delay(2000);
-  //    Vbot.clearMouth();
 
     }else{ //Update Servo:
 
@@ -481,9 +457,8 @@ void receiveSing(){
     if (arg != NULL) {sing=atoi(arg);}
     else 
     {
-     // Vbot.putMouth(xMouth);
       delay(2000);
-     // Vbot.clearMouth();
+
     }
 
     switch (sing) {
@@ -556,7 +531,7 @@ void receiveSing(){
 void receiveName(){
 
     //sendAck & stop if necessary
-    //sendAck();
+    sendAck();
     Vbot.home(); 
     Vbot.sing(S_confused); //deny to receive command changing the name. 
     /*
@@ -693,13 +668,12 @@ void LowBatteryAlarm(){
     double batteryLevel = Vbot.getBatteryLevel();
 
     if(batteryLevel<45){
-      //Vbot.putMouth(thunder);
       Vbot.bendTones (880, 2000, 1.04, 8, 3);  //A5 = 880
       
       delay(30);
       
       Vbot.bendTones (2000, 880, 1.02, 8, 3);  //A5 = 880
-      //Vbot.clearMouth();
+
       delay(500);     
     }
 }
