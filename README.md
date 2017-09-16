@@ -31,7 +31,7 @@ Zowi-Vbot được build để có thể lập trình bằng ngôn ngữ C/C++ A
   *  Để test chương trình Demo tránh vật cản sử dụng cảm biến siêu âm SRF04, nạp chương trình: Examples/ZowiVbot/Vbot_avoid.ino  
 ## Arduino Code: Khởi tạo robot và sử dụng các hàm chính
 ### Khởi tạo
-
+```
 #include <ZowiVbot.h>
 ZowiVbot Vbot;  //tạo một đối tượng từ lớp ZowiVbot, ví dụ tên là Vbot, có thể đặt tên tùy ý
  void setup(){
@@ -40,30 +40,70 @@ ZowiVbot Vbot;  //tạo một đối tượng từ lớp ZowiVbot, ví dụ tên
   Vbot.home();    // đưa các khớp của robot về vị trí cân bằng, Robot vào trạng thái nghỉ. 
   delay(50);
 }
+```
 ### Sử dụng các hàm chính
+```
 Vbot.home(); // trở về trạng thái nghỉ, các khớp về vị trí cân bằng
+```
 #### Các hàm chuyển động Robot
+```
 Vbot.jump(step,Time);//động tác nhảy lên và đáp xuống với tham số step (interger) là số bước, Time: thời gian thực thi mỗi bước
+```
+```
 Vbot.walk(step,Time, Dir);// Động tác đi bộ Dir = FORWARD (tới) hoặc BACKWARD (lui)
+```
+```
 Vbot.turn(step,Time, Dir);// động tác rẽ, Dir: LEFT, RIGHT
+```
+```
 Vbot.bend(step,Time, Dir);// động tác nghiên qua một bên đứng một chân, DIR = LEFT, RIGHT
+```
+```
 Vbot.ShakeLeg(step,Time, Dir);// động tác nghiên một bên đứng một chân và vẫy chân còn lại DIR = LEFT, RIGHT
+```
+```
 Vbot.updown(Step,Time,H) ; // động tác nhún lên xuống với H là biên độ nhún đơn vị là góc quay của bàn chân (độ) (cao hay thấp).
+```
+```
 Vbot.swing(Step,Time,H); //động tác lắc lư, tham số tương tự như trên 
+```
+```
 Vbot.tiptoeSwing(Step,Time,H); //động tác vừa lắc vừa nhún, tham số tương tự như trên
+```
+```
 Vbot.jitter(Step,Time,H); //động tác hoảng loạng, xoay hai bàn chân cúm vào nhau
-Vbot.ascendingTurn(Step,Time,H);  //động tác xoay cúm chân vào nhau và nhún lên
+```
+```
+Vbot.ascendingTurn(Step,Time,H);  //động tác xoay cúm chân vào nhau và nhún lên 
+```
+
+```
 Vbot.moonwalker(Step,Time, H, Dir); //động tác đi không trọng lực của Michael Jackson, với DIR = LEFT, RIGHT
+```
+```
 Vbot.crusaito(Step,Time,H,Dir); //động tác vui mừng nhảy cởn lên (DIR = FORWARD,BACKWARD)
+```
+```
 Vbot.flapping(Step,Time,H,Dir); //động tác vỗ cánh bằng chân, DIR = FORWARD,BACKWARD)
+```
 /////////////////////////////////////////////////
 #### Các hàm tương tác với cảm biên
-float distance = Vbot.getDistance(); //đọc cảm biến khoản cách SRF04 và gán vào biến kiểu float là distance (đơn vị Cm); 
+```
+float distance = Vbot.getDistance(); //đọc cảm biến khoản cách SRF04 và gán vào biến kiểu float là distance (đơn vị Cm);
+```
+```
 int noise = getNoise(); //đọc cảm biến âm thanh và gán vào biến noise (kiểu int) -> biểu diễn mức âm thanh 
-double batteryLevel = getBatteryLevel(); //đọc mức Pin (%) 
+```
+```
+double batteryLevel = getBatteryLevel(); //đọc mức Pin (%)
+```
+```
 double batteryVoltae = getBatteryVoltage(); //đọc điện áp Pin
-#### Các hàm 
+```
+#### Các hàm về hành vi - thái độ
+```
 Vbot.sing(songname); //với songname = S_connection, S_disconnection 
+```
 
 
 
