@@ -102,10 +102,21 @@ double batteryVoltae = getBatteryVoltage(); //đọc điện áp Pin
 ```
 #### Các hàm về hành vi - thái độ
 ```
-Vbot.sing(songname); //với songname = S_connection, S_disconnection 
+Vbot.sing(songname); // Phát ra tiếng kêu với tham số là songname
+```
+```
+Macro cho songname: 
+với songname = S_connection, S_disconnection, S_buttonPushed,S_surprise, S_OhOoh, _OhOoh2, Scuddly, S_sleeping, S_happy, S_superHappy, S_happy_short, S_sad, S_confused, S_fart1, S_fart2, S_fart3
 ```
 
+```
+Vbot.playGesture(gesture); // Thể hiện một hành vi nào đó..tham số là gesture với các macro sau: 
 
+```
+```
+Macro cho gesture: 
+gesture = RobotHappy, RobotSuperHappy, RobotSad, RobotSleeping, RobotFart, RobotConfused, RobotLove, RobotAngry, RobotFretful, RobotMagic, RobotWave, RobotVictory, RobotFail
+```
 
 
 
