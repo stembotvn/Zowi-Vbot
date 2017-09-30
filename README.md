@@ -15,7 +15,7 @@ Làm theo hướng dẫn tải tại link: http://stembot.vn/products/zowivbot
 Với các sản phẩm Full Combo kit, Arduino Board được stembot.vn nạp sẵn firmware BluetoothAPP, khi bật nguồn lên tất cả Servo sẽ tự động trở về vị trí cân bằng sau tiếng còi báo.
 
 ## Programming 
-Zowi-Vbot được build để có thể lập trình bằng ngôn ngữ C/C++ Arduino, Scratch Mblock và Graphical Block từ Android App Zowi dành cho các đối tượng mới tiếp cận với lập trình . Phiên bản hiện tại chỉ mới cơ bản ở ngôn ngữ Arduino C/C++ kết hợp với APP Zowi. 
+Zowi-Vbot được build để có thể lập trình bằng ngôn ngữ C/C++ Arduino, Scratch trong môi trường mBlock và Graphical Block từ Android App Zowi dành cho các đối tượng mới tiếp cận với lập trình .
 
 1. Cài đặt Arduino IDE để có thể viết code và nạp chương trình cho các Board tương thích nền tảng Arduino tại đây: https://www.arduino.cc/en/Main/Software (Bỏ qua nếu đã cài đặt Arduino IDE)
 2. Tải Driver cho Board Arduino Nano tại đây: http://www.wch.cn/download/CH341SER_EXE.html
