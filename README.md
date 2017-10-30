@@ -11,7 +11,7 @@ Zowi-Vbot được stembot.vn thiết kế lại toàn bộ phần khung Hardwar
 Bộ lắp ghép Zowi-Vbot có thể order tại: http://stembot.vn/products/zowivbot
 
 ## Installation - Lắp đặt phần khung
-Làm theo hướng dẫn tải tại link: http://stembot.vn/products/zowivbot
+Làm theo hướng dẫn tải tại link: http://stembot.vn/blogs/learn-do/huong-dan-lap-rap-zowi-vbot
 Với các sản phẩm Full Combo kit, Arduino Board được stembot.vn nạp sẵn firmware BluetoothAPP, khi bật nguồn lên tất cả Servo sẽ tự động trở về vị trí cân bằng sau tiếng còi báo.
 
 ## Programming 
