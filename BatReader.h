@@ -19,8 +19,8 @@
 // Definitions            //
 ////////////////////////////
 #define BAT_PIN A1
-#define BAT_MAX	8.4
-#define BAT_MIN	6.5
+#define BAT_MAX	8.1
+#define BAT_MIN	6.2
 #define ANA_REF	5
 #define SLOPE	100/(BAT_MAX - BAT_MIN)
 #define OFFSET	(100*BAT_MIN)/(BAT_MAX - BAT_MIN)

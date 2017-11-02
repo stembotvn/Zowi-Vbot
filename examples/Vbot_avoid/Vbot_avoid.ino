@@ -37,13 +37,13 @@ void loop() {
                Vbot.sing(S_surprise); 
                Vbot.playGesture(VbotFretful); 
                Vbot.sing(S_fart3); 
-               Vbot.walk(2,1300,BACKWARD); 
-               Vbot.turn(4,1000,RIGHT);                
+               Vbot.walk(2,1300,-1); 
+               Vbot.turn(2,1000,-1);                
              delay(50); 
            
              }        
          else{ 
-            Vbot.walk(1,1000,FƠRWARD); 
+            Vbot.walk(1,1000,1); 
            
         }           
   }  

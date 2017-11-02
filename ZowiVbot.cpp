@@ -31,6 +31,7 @@ void ZowiVbot::init(int YL, int YR, int RL, int RR, bool load_calibration, int N
   }
   
   for (int i = 0; i < 4; i++) servo_position[i] = 90;
+   delay(1000);
    pinMode(PIN_Servo_Enable,OUTPUT);  
    digitalWrite(PIN_Servo_Enable,LOW);
   //US sensor init with the pins:
@@ -206,7 +207,7 @@ void ZowiVbot::walk(float steps, int T, int dir){
   //--      -90 : Walk forward
   //--       90 : Walk backward
   //-- Feet servos also have the same offset (for tiptoe a little bit)
-  int A[4]= {30, 30, 25, 25};
+  int A[4]= {26, 26, 25, 25};
   int O[4] = {0, 0, 4, -4}; 
   double phase_diff[4] = {0, 0, DEG2RAD(dir * -90), DEG2RAD(dir * -90)};   
 
@@ -229,17 +230,17 @@ void ZowiVbot::turn(float steps, int T, int dir){
   //-- When the right hip servo amplitude is higher, the steps taken by
   //--   the right leg are bigger than the left. So, the robot describes an 
   //--   left arc
-  int A[4]= {30, 30, 20, 20};
+  int A[4]= {28, 28, 25, 25};
   int O[4] = {0, 0, 4, -4};
   double phase_diff[4] = {0, 0, DEG2RAD(-90), DEG2RAD(-90)}; 
     
   if (dir == LEFT) {  
-    A[0] = 30; //-- Left hip servo
+    A[0] = 28; //-- Left hip servo
     A[1] = 10; //-- Right hip servo
   }
   else {
     A[0] = 10;
-    A[1] = 30;
+    A[1] = 28;
   }
     
   //-- Let's oscillate the servos!
