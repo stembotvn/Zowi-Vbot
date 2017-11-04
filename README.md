@@ -13,7 +13,25 @@ Bộ lắp ghép Zowi-Vbot có thể order tại: http://stembot.vn/products/zow
 ## Installation - Lắp đặt phần khung
 Làm theo hướng dẫn tải tại link: http://stembot.vn/blogs/learn-do/huong-dan-lap-rap-zowi-vbot
 Với các sản phẩm Full Combo kit, Arduino Board được stembot.vn nạp sẵn firmware BluetoothAPP, khi bật nguồn lên tất cả Servo sẽ tự động trở về vị trí cân bằng sau tiếng còi báo.
+## Hardware 
+ZowiVbot use ZowiControl Board from STEMBOT.VN design with many modifications as Orginal due to supply enough Power for Servos (S3003), Bluetooth HC06 in Software Serial for Upload Firmware without remove HC06, disactive Servo power during Arduino boot process.... 
+However if you DIY with Arduino Nano Expansion Board as Original ottodiy, please config (assembly) your Hardware as follow for using this library:
 
+Board mạch điều khiển Robot Zowi được STEMbot thiết kế lại với nhiều sửa đổi so với phiên bản gốc sử dụng Board mở rộng Nano, lý do là để cung cấp đủ công suất cho các động cơ Servo lớn, sử dụng Bluetooth interface ở chế độ SoftwareSerial giúp nạp firmware từ Arduino mà không cần phải tháo module Bluetooth, Vô hiệu hóa nguồn cấp cho Servo cho đến khi Arduino khhởi động xong giúp cho việc khởi động Robot không bị xoay chân về vị trí 0 độ do quá trình khởi động của Servo. 
+```
+#PIN_Buzzer  A2              // Buzzer Pin    ->  Còi 
+#PIN_Trigger        9        //SRF04 Trigger Pin -> Chân Trigger cảm biến siêu âm SRF04
+#define PIN_Echo    10       //SRF04 Echo Pin   -> Chân Echo 
+#define PIN_NoiseSensor 6    // Sound sensor Pin -> Chân Analog in cho cảm biến âm thanh   
+#define PIN_Servo_Enable  A3   //Using to Enable Power for Servo, this can help help all Servos is disactive during boot process. 
+#define BT_Rx   8    //Bluetooth Rx Pin
+#define BT_Tx   7    //Bluetooth Tx Pin
+
+#define HIP_L   2     //Left HIP Servo Pin
+#define FOOT_L  3     //Left Foot Servo Pin
+#define HIP_R   4     //Right HIP Servo Pin
+#define FOOT_R  5     //Right FOOT Servo Pin    
+```
 ## Programming 
 Zowi-Vbot được build để có thể lập trình bằng ngôn ngữ C/C++ Arduino, Scratch trong môi trường mBlock và Graphical Block từ Android App Zowi dành cho các đối tượng mới tiếp cận với lập trình .
 
@@ -30,7 +48,7 @@ Zowi-Vbot được build để có thể lập trình bằng ngôn ngữ C/C++ A
   *  Để tiến hành config cho module Bluetooth HC 06 có thể tương thích với Zowi App, cần nạp chương trình Examples/ZowiVbot/HC06_BT_config.ino và bật Serial Monitor để quan sát quá trình. 
   *  Để test chương trình Demo tránh vật cản sử dụng cảm biến siêu âm SRF04, nạp chương trình: Examples/ZowiVbot/Vbot_avoid.ino  
 ## Arduino Code: Khởi tạo robot và sử dụng các hàm chính
-### Khởi tạo
+### Khởi tạo (Initialize Robot)
 ```
 #include <ZowiVbot.h>  // khai báo thư viện cho ZowiVbot
 ZowiVbot Vbot;  //tạo một đối tượng từ lớp ZowiVbot, ví dụ tên là Vbot, có thể đặt tên tùy ý
@@ -41,11 +59,11 @@ ZowiVbot Vbot;  //tạo một đối tượng từ lớp ZowiVbot, ví dụ tên
   delay(50);
 }
 ```
-### Sử dụng các hàm chính
+### Sử dụng các hàm chính (Some useful functions)
 ```
 Vbot.home(); // trở về trạng thái nghỉ, các khớp về vị trí cân bằng
 ```
-#### Các hàm chuyển động Robot
+#### Các hàm chuyển động Robot  (moving functions)
 ```
 Vbot.jump(step,Time);//động tác nhảy lên và đáp xuống với tham số step (interger) là số bước, Time: thời gian thực thi mỗi bước
 ```
@@ -87,7 +105,7 @@ Vbot.crusaito(Step,Time,H,Dir); //động tác vui mừng nhảy cởn lên (DIR
 Vbot.flapping(Step,Time,H,Dir); //động tác vỗ cánh bằng chân, DIR = FORWARD,BACKWARD)
 ```
 /////////////////////////////////////////////////
-#### Các hàm tương tác với cảm biên
+#### Các hàm tương tác với cảm biên  (Sensor interface)
 ```
 float distance = Vbot.getDistance(); //đọc cảm biến khoản cách SRF04 và gán vào biến kiểu float là distance (đơn vị Cm);
 ```
@@ -100,7 +118,7 @@ double batteryLevel = getBatteryLevel(); //đọc mức Pin (%)
 ```
 double batteryVoltae = getBatteryVoltage(); //đọc điện áp Pin
 ```
-#### Các hàm về hành vi - thái độ
+#### Các hàm về hành vi - thái độ (Gesture functions) 
 ```
 Vbot.sing(songname); // Phát ra tiếng kêu với tham số là songname
 ```
