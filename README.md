@@ -4,7 +4,8 @@ Zowi-Vbot, một dòng robot 2 chân đơn giản (bipedal Robot) phục vụ ch
 
 ## OttoDIY opensource Project 
 Zowi-Vbot, là một biến thể được chỉnh sửa phần mềm  và thiết kế lại phần hardware từ dự án robot mã nguồn mở ottoDIY (http://ottodiy.com) và kế thừa một số tính năng, Android APP từ sản phẩm Zowi của công ty BQ (http://zowi.bq.com/en/)
-  - Website dự án: http://ottodiy.com
+  - Website dự án: http://ottodiy.com 
+  Thanks OttoDIY Creators team for sharing wonderful project. 
 
 ## Zowi-Vbot Design
 Zowi-Vbot được stembot.vn thiết kế lại toàn bộ phần khung Hardware sử dụng vật liệu gỗ công nghiệp với công nghệ cắt LaserCNC thay cho bản gốc sử dụng công nghệ in 3D. Người chơi chỉ cần theo hướng dẫn có thể lắp ghép các mảnh gỗ với nhau trong vòng 30-45 phút là sẽ có cho mình một chú robot Zowi-Vbot ngộ nghĩnh với những tính năng không khác gì dự án gốc với giá thành thấp phù hợp với các bạn học sinh sinh viên ở Việt Nam. 
