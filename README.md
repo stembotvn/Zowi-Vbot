@@ -28,10 +28,10 @@ Board mạch điều khiển Robot Zowi được STEMbot thiết kế lại vớ
 #define BT_Rx   8    //Bluetooth Rx Pin
 #define BT_Tx   7    //Bluetooth Tx Pin
 
-#define HIP_L   2     //Left HIP Servo Pin
-#define FOOT_L  3     //Left Foot Servo Pin
-#define HIP_R   4     //Right HIP Servo Pin
-#define FOOT_R  5     //Right FOOT Servo Pin    
+#define HIP_L   2     //Left HIP Servo Pin D2
+#define FOOT_L  3     //Left Foot Servo Pin D3
+#define HIP_R   4     //Right HIP Servo Pin D4
+#define FOOT_R  5     //Right FOOT Servo Pin D5     
 ```
 ## Programming 
 Zowi-Vbot được build để có thể lập trình bằng ngôn ngữ C/C++ Arduino, Scratch trong môi trường mBlock và Graphical Block từ Android App Zowi dành cho các đối tượng mới tiếp cận với lập trình .
