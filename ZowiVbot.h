@@ -3,7 +3,7 @@
 
 #include <Servo.h>
 #include "Oscillator.h"
-#include <EEPROM.h>
+//#include <EEPROM.h>
 
 #include "US.h"
 //#include "LedMatrix.h"
@@ -77,6 +77,7 @@ class ZowiVbot
     void moonwalker(float steps=1, int T=900, int h=20, int dir=LEFT);
     void crusaito(float steps=1, int T=900, int h=20, int dir=FORWARD);
     void flapping(float steps=1, int T=1000, int h=20, int dir=FORWARD);
+    void move(int moveID,int time);
 
     //-- Sensors functions
     float getDistance(); //US sensor
