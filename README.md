@@ -44,7 +44,7 @@ Zowi-Vbot được build để có thể lập trình bằng ngôn ngữ C/C++ A
 5. Khởi động lại Arduino IDE -> Vào File/Examples nếu thấy thư mục ZowiVbot" xuất hiện thì cài đặt thành công, Nạp các chương trình Example để khám phá các khả năng của ZowiVbot Robot. 
 ## UserGuide - Hướng dẫn sử dụng
   *  Để sử dụng với Android Phone qua Bluetooth, mở Arduino IDE và nạp chương trình Examples/ZowiVbot/Vbot_BT_ZowiApp.ino (Đây là chương trình default với khách hàng mua sản phẩm nguyên kit từ STEMbot.vn)
-  Lưu ý: chương trình này cũng có thể tương thích với môi trường Mblock Programming qua Bluetooth tuy nhiên hiện tại việc thử nghiệm Scratch với Bluetooth vẫn chưa hoàn tất, chúng tôi sẽ cung cấp bản cập nhật ngay khi hoàn thành.  
+  Lưu ý: chương trình này cũng có thể tương thích với môi trường Mblock Programming qua Bluetooth 
   *  Để lập trình bằng ngôn ngữ Scratch trong môi trường Mblock thông qua cáp USBSerial, cần nạp chương trình Examples/ZowiVbot/Vbot_Mblock_inScratchMode.ino
   *  Để tiến hành config cho module Bluetooth HC 06 có thể tương thích với Zowi App, cần nạp chương trình Examples/ZowiVbot/HC06_BT_config.ino và bật Serial Monitor để quan sát quá trình. 
   *  Để test chương trình Demo tránh vật cản sử dụng cảm biến siêu âm SRF04, nạp chương trình: Examples/ZowiVbot/Vbot_avoid.ino  
