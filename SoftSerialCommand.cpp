@@ -64,7 +64,7 @@ void SoftSerialCommand::readSerial()
 		boolean matched; 
 		
 			inChar=SoftSerial->read();   // Read single available character, there may be more waiting
-		
+		    Serial.print(inChar);
 		if (inChar==term) {     // Check for the terminator (default '\r') meaning end of command
 
 			onlyOneCommand=false; //

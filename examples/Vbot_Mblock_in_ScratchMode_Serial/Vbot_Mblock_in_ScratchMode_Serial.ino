@@ -10,7 +10,7 @@
 //-----------------------------------------------------------------
 
 //-- Vbot Library
-#include <ZowiVbot.h>
+#include "ZowiVbot.h"
 #include "ZowiSerialCommand.h"
 
 ZowiSerialCommand SCmd; //The SerialCommand object
@@ -54,7 +54,7 @@ void setup(){
   //BT.begin(9600);  
   Serial.begin(9600);
   
-  Vbot.init(HIP_L, HIP_R, FOOT_L, FOOT_R, false, PIN_NoiseSensor, PIN_Buzzer,PIN_Trigger, PIN_Echo);
+  Vbot.init(HIP_L, HIP_R, FOOT_L, FOOT_R, true, PIN_NoiseSensor, PIN_Buzzer,PIN_Trigger, PIN_Echo);
 
 
   //Set a random seed
@@ -191,16 +191,51 @@ void recieveBuzzer(){
 
 
 //-- Function to receive TRims commands
+
 void receiveTrims(){  
 
     //sendAck & stop if necessary
     sendAck();
     Vbot.home(); 
-    Vbot.sing(S_confused);
-    //Vbot.playGesture(RobotConfused);// Indicate that Function not availabe for this version
     
+    int trim_YL,trim_YR,trim_RL,trim_RR;
+
+    //Definition of Servo Bluetooth command
+    //C trim_YL trim_YR trim_RL trim_RR
+    //Examples of receiveTrims Bluetooth commands
+    //C 20 0 -8 3
+    bool error = false;
+    char *arg;
+    arg=SCmd.next();
+   if (arg != NULL) { trim_YL=atoi(arg); }    // Converts a char string to an integer   
+    else {error=true;}
+
+    arg = SCmd.next(); 
+    if (arg != NULL) { trim_YR=atoi(arg); }    // Converts a char string to an integer  
+    else {error=true;}
+
+    arg = SCmd.next(); 
+    if (arg != NULL) { trim_RL=atoi(arg); }    // Converts a char string to an integer  
+    else {error=true;}
+
+    arg = SCmd.next(); 
+    if (arg != NULL) { trim_RR=atoi(arg); }    // Converts a char string to an integer  
+    else {error=true;}
+    
+    if(error==true){
+
+      delay(2000);
+
+    }else{ //Save it on EEPROM
+      Vbot.setTrims(trim_YL, trim_YR, trim_RL, trim_RR);
+      Vbot.saveTrimsOnEEPROM(); //Uncomment this only for one upload when you finaly set the trims.
+    } 
+
+    sendFinalAck();
 
 }
+
+
  
 
 //-- Function to receive Servo commands
@@ -242,10 +277,11 @@ void receiveServo(){
     }else{ //Update Servo:
 
       int servoPos[4]={servo_YL, servo_YR, servo_RL, servo_RR}; 
-      Vbot._moveServos(200, servoPos);   //Move 200ms
+      Vbot._moveServos(100, servoPos);   //Move 200ms
       
     }
-
+    Vbot.detachServos();
+    Vbot.setRestState(true);
     sendFinalAck();
 
 }
@@ -542,7 +578,7 @@ void receiveName(){
 //-- Function to send Vbot's name
 void requestName(){
 
-    Vbot.home(); //stop if necessary
+     Vbot.home(); //stop if necessary
 
     char actualVbotName[11]= "Zowi";  //Variable to store data read from EEPROM.
  

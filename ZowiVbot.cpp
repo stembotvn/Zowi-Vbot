@@ -21,14 +21,16 @@ void ZowiVbot::init(int YL, int YR, int RL, int RR, bool load_calibration, int N
  
   attachServos();
   isOttoResting=false;
-/*
+
   if (load_calibration) {
+     Serial.println("load offset from EEROM");
     for (int i = 0; i < 4; i++) {
       int servo_trim = EEPROM.read(i);
       if (servo_trim > 128) servo_trim -= 256;
       servo[i].SetTrim(servo_trim);
+       Serial.print(servo_trim); Serial.print("  ");
     }
-  }*/
+  }
   
   for (int i = 0; i < 4; i++) servo_position[i] = 90;
    delay(1000);
@@ -43,6 +45,7 @@ void ZowiVbot::init(int YL, int YR, int RL, int RR, bool load_calibration, int N
 
   pinMode(Buzzer,OUTPUT);
   pinMode(NoiseSensor,INPUT);
+  Serial.println("Initalation Done");
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -73,10 +76,10 @@ void ZowiVbot::setTrims(int YL, int YR, int RL, int RR) {
 }
 
 void ZowiVbot::saveTrimsOnEEPROM() {
-  /*
+  
   for (int i = 0; i < 4; i++){ 
       EEPROM.write(i, servo[i].getTrim());
-  } */
+  } 
       
 }
 
@@ -105,6 +108,7 @@ void ZowiVbot::_moveServos(int time, int  servo_target[]) {
     for (int i = 0; i < 4; i++) servo[i].SetPosition(servo_target[i]);
   }
   for (int i = 0; i < 4; i++) servo_position[i] = servo_target[i];
+ 
 }
 
 
@@ -151,7 +155,8 @@ void ZowiVbot::_execute(int A[4], int O[4], int T, double phase_diff[4], float s
 ///////////////////////////////////////////////////////////////////
 void ZowiVbot::home(){
 
-  if(isOttoResting==false){ //Go to rest position only if necessary
+if(isOttoResting==false)
+  { //Go to rest position only if necessary
 
     int homes[4]={90, 90, 90, 90}; //All the servos at rest position
     _moveServos(500,homes);   //Move the servos in half a second
@@ -207,13 +212,15 @@ void ZowiVbot::walk(float steps, int T, int dir){
   //--      -90 : Walk forward
   //--       90 : Walk backward
   //-- Feet servos also have the same offset (for tiptoe a little bit)
-  int A[4]= {26, 26, 25, 25};
-  int O[4] = {0, 0, 4, -4}; 
-  double phase_diff[4] = {0, 0, DEG2RAD(dir * -90), DEG2RAD(dir * -90)};   
+  int A[4]= {30, 30, 16, 16};
+//  int O[4] = {0, 0, 4, -4};
+  int O[4] = {0, 0, 0, 0};
+  double phase_diff[4] = {0, 0, DEG2RAD(dir * -90), DEG2RAD(dir * -90)};
 
   //-- Let's oscillate the servos!
   _execute(A, O, T, phase_diff, steps);  
 }
+
 
 
 //---------------------------------------------------------
@@ -230,23 +237,22 @@ void ZowiVbot::turn(float steps, int T, int dir){
   //-- When the right hip servo amplitude is higher, the steps taken by
   //--   the right leg are bigger than the left. So, the robot describes an 
   //--   left arc
-  int A[4]= {28, 28, 25, 25};
+  int A[4]= {30, 30, 16, 16};
   int O[4] = {0, 0, 4, -4};
   double phase_diff[4] = {0, 0, DEG2RAD(-90), DEG2RAD(-90)}; 
     
   if (dir == LEFT) {  
-    A[0] = 28; //-- Left hip servo
+    A[0] = 30; //-- Left hip servo
     A[1] = 10; //-- Right hip servo
   }
   else {
     A[0] = 10;
-    A[1] = 28;
+    A[1] = 30;
   }
     
   //-- Let's oscillate the servos!
   _execute(A, O, T, phase_diff, steps); 
 }
-
 
 //---------------------------------------------------------
 //-- Otto gait: Lateral bend
@@ -258,11 +264,8 @@ void ZowiVbot::turn(float steps, int T, int dir){
 void ZowiVbot::bend (int steps, int T, int dir){
 
   //Parameters of all the movements. Default: Left bend
-  //int bend1[4]={90, 90, 58, 35}; 
-  int bend1[4]={90, 90, 56, 33}; 
+  int bend1[4]={90, 90, 56, 25}; 
   int bend2[4]={90, 90, 56, 105};
-  //int bend1[4]={90, 90, 60, 60}; 
-  //int bend2[4]={90, 90, 45, 105};
   int homes[4]={90, 90, 90, 90};
 
   //Time of one bend, constrained in order to avoid movements too fast.
@@ -271,29 +274,21 @@ void ZowiVbot::bend (int steps, int T, int dir){
   //Changes in the parameters if right direction is chosen 
   if(dir==-1)
   {
-    bend1[2]=180-28;
+    bend1[2]=180-25;
     bend1[3]=180-56;  //Not 65. Otto is unbalanced
-    //bend1[3]=180-70;
     bend2[2]=180-105;
     bend2[3]=180-56;
-
-   // bend1[2]=180-60;
-   // bend1[3]=180-60;  //Not 65. Otto is unbalanced
-   // bend2[2]=180-105;
-   // bend2[3]=180-45;
   }
 
   //Time of the bend movement. Fixed parameter to avoid falls
-  int T2=1000; 
-  //  int T2 = 1000;
+  int T2=800; 
+
   //Bend movement
   for (int i=0;i<steps;i++)
   {
     _moveServos(T2/2,bend1);
     _moveServos(T2/2,bend2);
-   delay(T*0.8);
-  // delay(T*2);
-
+    delay(T*0.8);
     _moveServos(500,homes);
   }
 
@@ -313,20 +308,20 @@ void ZowiVbot::shakeLeg (int steps,int T,int dir){
   int numberLegMoves=2;
 
   //Parameters of all the movements. Default: Right leg
-  int shake_leg1[4]={90, 90, 58, 35};   
-  int shake_leg2[4]={90, 90, 62, 120};
-  int shake_leg3[4]={90, 90, 58, 60};
+  int shake_leg1[4]={90, 90, 56, 25};   
+  int shake_leg2[4]={90, 90, 56, 120};
+  int shake_leg3[4]={90, 90, 56, 60};
   int homes[4]={90, 90, 90, 90};
 
   //Changes in the parameters if left leg is chosen
   if(dir==-1)      
   {
-    shake_leg1[2]=180-30;
+    shake_leg1[2]=180-25;
     shake_leg1[3]=180-55;
     shake_leg2[2]=180-120;
     shake_leg2[3]=180-55;
-    shake_leg3[2]=180-60;
-    shake_leg3[3]=180-55;
+    shake_leg3[2]=180-55;
+    shake_leg3[3]=180-60;
   }
   
   //Time of the bend movement. Fixed parameter to avoid falls
@@ -861,9 +856,9 @@ void ZowiVbot::sing(int songName){
 }
 //////////////////////////////////////////////////////////////////////
 ////--MOVE--//////////////////////////////////////////////////////////
-void ZowiVbot::move(int moveID,int time){
+void ZowiVbot::move(int moveID,int time, int _moveSize){
   int T = time;
-  int moveSize;
+  int moveSize = _moveSize;
   switch (moveID) {
     case 0:
       home();
@@ -884,38 +879,38 @@ void ZowiVbot::move(int moveID,int time){
       updown(1,T,30);
       break;
     case 6: //M 6 1000 30
-    moveSize =30;
+  
       moonwalker(1,T,moveSize,1);
       break;
     case 7: //M 7 1000 30
-      moveSize =30;
+     
       moonwalker(1,T,moveSize,-1);
       break;
     case 8: //M 8 1000 30
-    moveSize =30;
+  
       swing(1,T,moveSize);
       break;
     case 9: //M 9 1000 30 
-    moveSize =30;
+   
       crusaito(1,T,moveSize,1);
       break;
     case 10: //M 10 1000 30
-      moveSize =30; 
+    
       crusaito(1,T,moveSize,-1);
       break;
     case 11: //M 11 1000 
       jump(1,T);
       break;
     case 12: //M 12 1000 30
-    moveSize =30;
+   
       flapping(1,T,moveSize,1);
       break;
     case 13: //M 13 1000 30
-    moveSize =30;
+   
       flapping(1,T,moveSize,-1);
       break;
     case 14: //M 14 1000 20
-    moveSize = 20;
+   
       tiptoeSwing(1,T,moveSize);
       break;
     case 15: //M 15 500 
@@ -931,11 +926,11 @@ void ZowiVbot::move(int moveID,int time){
       shakeLeg(1,T,-1);
       break;
     case 19: //M 19 500 20
-    moveSize =30;
+  
       jitter(1,T,moveSize);
       break;
     case 20: //M 20 500 15
-    moveSize =30;
+ 
       ascendingTurn(1,T,moveSize);
       break;
     default:

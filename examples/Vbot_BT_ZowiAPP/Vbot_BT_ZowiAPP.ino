@@ -52,7 +52,7 @@ void setup(){
   BT.begin(9600);  //init for Bluetooth HC-06 interface via Software Serial 
   Serial.begin(9600); //init for Serial interface for Debug data in PC 
   
-    Vbot.init(HIP_L, HIP_R, FOOT_L, FOOT_R, false, PIN_NoiseSensor, PIN_Buzzer,PIN_Trigger, PIN_Echo);
+    Vbot.init(HIP_L, HIP_R, FOOT_L, FOOT_R, true, PIN_NoiseSensor, PIN_Buzzer,PIN_Trigger, PIN_Echo);
 
   randomSeed(analogRead(A6));
 
@@ -136,6 +136,7 @@ void receiveStop(){
 
     sendAck();
     Vbot.home();
+    Serial.println("Error command");
     sendFinalAck();
 
 }
@@ -192,23 +193,55 @@ void recieveBuzzer(){
 
 //-- Function to receive TRims commands
 void receiveTrims(){  
-
-    //sendAck & stop if necessary
+  //sendAck & stop if necessary
     sendAck();
     Vbot.home(); 
-    Vbot.sing(S_confused);
-    //Vbot.playGesture(RobotConfused);// Indicate that Function not availabe for this version
-    
 
+    int trim_YL,trim_YR,trim_RL,trim_RR;
+
+    //Definition of Servo Bluetooth command
+    //C trim_YL trim_YR trim_RL trim_RR
+    //Examples of receiveTrims Bluetooth commands
+    //C 20 0 -8 3
+    bool error = false;
+    char *arg;
+    arg=SCmd.next();
+    if (arg != NULL) { trim_YL=atoi(arg); }    // Converts a char string to an integer   
+    else {error=true;}
+
+    arg = SCmd.next(); 
+    if (arg != NULL) { trim_YR=atoi(arg); }    // Converts a char string to an integer  
+    else {error=true;}
+
+    arg = SCmd.next(); 
+    if (arg != NULL) { trim_RL=atoi(arg); }    // Converts a char string to an integer  
+    else {error=true;}
+
+    arg = SCmd.next(); 
+    if (arg != NULL) { trim_RR=atoi(arg); }    // Converts a char string to an integer  
+    else {error=true;}
+    
+    if(error==true){
+
+      delay(2000);
+
+    }else{ //Save it on EEPROM
+      Vbot.setTrims(trim_YL, trim_YR, trim_RL, trim_RR);
+      Vbot.saveTrimsOnEEPROM(); 
+      Serial.println("Save offset to EEROM");
+    } 
+
+    sendFinalAck();   
+    
 }
  
 
 //-- Function to receive Servo commands
 void receiveServo(){  
-
+    
     sendAck(); 
     moveId = 30;
-
+   
     //Definition of Servo Bluetooth command
     //G  servo_YL servo_YR servo_RL servo_RR 
     //Example of receiveServo Bluetooth commands
@@ -238,14 +271,11 @@ void receiveServo(){
       delay(2000);
 
     }else{ //Update Servo:
-
-      int servoPos[4]={servo_YL, servo_YR, servo_RL, servo_RR}; 
-      Vbot._moveServos(200, servoPos);   //Move 200ms
-      
+     int servoPos[4]={servo_YL, servo_YR, servo_RL, servo_RR}; 
+      Vbot._moveServos(100, servoPos);   //Move 200ms
+     
     }
-
-    sendFinalAck();
-
+  
 }
 
 
@@ -317,30 +347,30 @@ void move(int moveId){
       Vbot.moonwalker(1,T,moveSize,-1);
       break;
     case 8: //M 8 1000 30
-	  moveSize =30;
+	//  moveSize =30;
       Vbot.swing(1,T,moveSize);
       break;
     case 9: //M 9 1000 30 
-	  moveSize =30;
+	//  moveSize =30;
       Vbot.crusaito(1,T,moveSize,1);
       break;
     case 10: //M 10 1000 30
-      moveSize =30;	
+  //    moveSize =30;	
       Vbot.crusaito(1,T,moveSize,-1);
       break;
     case 11: //M 11 1000 
       Vbot.jump(1,T);
       break;
     case 12: //M 12 1000 30
-	  moveSize =30;
+	//  moveSize =30;
       Vbot.flapping(1,T,moveSize,1);
       break;
     case 13: //M 13 1000 30
-	  moveSize =30;
+//	  moveSize =30;
       Vbot.flapping(1,T,moveSize,-1);
       break;
     case 14: //M 14 1000 20
-	  moveSize = 20;
+	//  moveSize = 20;
       Vbot.tiptoeSwing(1,T,moveSize);
       break;
     case 15: //M 15 500 
@@ -356,11 +386,11 @@ void move(int moveId){
       Vbot.shakeLeg(1,T,-1);
       break;
     case 19: //M 19 500 20
-	  moveSize =30;
+//	  moveSize =30;
       Vbot.jitter(1,T,moveSize);
       break;
     case 20: //M 20 500 15
-	  moveSize =30;
+//	  moveSize =30;
       Vbot.ascendingTurn(1,T,moveSize);
       break;
     default:
